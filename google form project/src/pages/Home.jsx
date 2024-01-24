@@ -11,6 +11,13 @@ const Home = () => {
         setData(JSON.parse(localStorage.getItem("googleForm"))  || [])
     }, []);
 
+    // DELETE FORM
+    const deleteForm = (index) => {
+        let newData = data?.filter((curElem, indexx) => index!==indexx);
+        localStorage.setItem("googleForm", JSON.stringify(newData));
+        setData(newData)
+    }
+
     // console.log(data);
     
   return (
@@ -27,12 +34,23 @@ const Home = () => {
                 {
                     data?.map((curElem, index) => {
                         return (
-                            <Link key={index} to={`/show-form/${index}`} className="flex flex-col mb-2 mr-4">
-                                <div className="w-36 h-36 ps-1 pr-3 mt-4 border border-slate-300 flex justify-center items-center">
-                                    <img src={viewForm} className="w-16 h-16" alt="" />
-                                </div>  
-                                <span className="text-sm mt-1 text-center">{curElem?.formTitle}</span>
-                            </Link>    
+                            <div className="flex flex-col mb-2 mr-4" key={index}>
+                                <Link to={`/show-form/${index}`}>
+                                    <div className="w-36 h-36 ps-1 pr-3 mt-4 border border-slate-300 flex justify-center items-center">
+                                        <img src={viewForm} className="w-16 h-16" alt="" />
+                                    </div>  
+                                </Link>    
+                                <div className="text-sm mt-1 text-center flex flex-row justify-between">
+                                    <span></span>
+                                    <span>{curElem?.formTitle}</span>
+                                    <span>
+                                        <button type="button" onClick={() => deleteForm(index)} className="text-red-500 px-1 border border-red-400 font-bold">&#10799;</button>
+                                    </span>
+                                </div>
+
+                            </div>
+
+
                         )
                     })
                 }

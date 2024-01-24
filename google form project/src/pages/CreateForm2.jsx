@@ -13,6 +13,7 @@ const CreateForm2 = () => {
     let inputToAdd = {
         inputType: "text",
         question: "",
+        required: false,
         otherInput: []
     }      
     setData({
@@ -126,9 +127,10 @@ const CreateForm2 = () => {
     console.log("Submitted data", data);
     setTimeout(() => {
       navigate("/")
-    }, 1000)
+    }, 100)
   }
 
+  // REMOVE FIELD
   const removeField = (e, index) => {
     e.preventDefault();
     setData({
@@ -137,9 +139,25 @@ const CreateForm2 = () => {
     })
   }
 
+  const requiredField = (e, index) => {
+    const {checked} = e.target;
+    setData({
+      ...data,
+      formData: data?.formData?.map((curElem, indexx) => {
+        if (index === indexx) {
+          return {
+            ...curElem,
+            required: checked ? true : false,
+          }
+        }
+        return curElem
+      })
+    })
+  }
+
 
   // console.log(typeChange);
-  // console.log(data);
+  console.log(data);
 
   return (
     <>      
@@ -182,7 +200,13 @@ const CreateForm2 = () => {
                         ?
                         <div className="w-full flex flex-row justify-between">
                           <span className="text-sm text-gray-500 cursor-not-allowed">{curElem?.inputType}</span>
-                          <button type="button" className="text-xl bg-gray-300 text-red-500 m-[-2px] px-1" onClick={(e) => removeField(e, index)}>&#10799;</button>
+                          <span className="flex flex-row">
+                            <span className="px-2 pt-2 pb-1 mr-1 flex flex-row justify-center">
+                              <span className="text-xs mr-2">Required</span>
+                              <input type="checkbox" onChange={(e) => requiredField(e, index)} value={curElem?.required} />
+                            </span>
+                            <button type="button" className="text-xl bg-gray-300 text-red-500 m-[-2px] px-2" onClick={(e) => removeField(e, index)}>&#10799;</button>
+                          </span>
                         </div>
                         :
                         <div>
@@ -202,7 +226,13 @@ const CreateForm2 = () => {
                           
                           <div className="my-2 ml-6 flex flex-row justify-between">
                             <button type="button" onClick={(e) => addLabelValueField(e, index)} className="text-sm bg-black text-white p-2">Add Another Field</button>
-                            <button type="button" className="text-2xl bg-gray-300 text-red-500 px-2" onClick={(e) => removeField(e, index)}>&#10799;</button>
+                            <div className="flex flex-row">
+                              <span className="px-2 pt-2 pb-1 mr-1 flex flex-row justify-center items-center">
+                                <span className="text-xs mr-2">Required</span>
+                                <input type="checkbox" onChange={(e) => requiredField(e, index)} value={curElem?.required} />
+                              </span>
+                              <button type="button" className="text-2xl bg-gray-300 text-red-500 px-2" onClick={(e) => removeField(e, index)}>&#10799;</button>
+                            </div>
                           </div>
                         </div>
                       }
